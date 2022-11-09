@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routers, RouterPublic } from './routes/routes';
+import classNames from 'classnames/bind';
+import styles from './App.css';
+import ProtectionRouter from './ProtectionRouter';
+const cx = classNames.bind(styles);
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const Component = RouterPublic[0].component;
+    return (
+        <BrowserRouter>
+            <div className={cx('App')}>
+                <Routes>
+                    <Route path={RouterPublic[0].path} element={<Component />} />
+                    <Route element={<ProtectionRouter />}>
+                        {Routers.map((router, index) => {
+                            return <Route key={index} path={router.path} element={<router.component />} />;
+                        })}
+                    </Route>
+                </Routes>
+            </div>
+        </BrowserRouter>
+    );
 }
 
 export default App;
